@@ -21,10 +21,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.raafi.muhasabahharian.core.auth.AuthManager
 import com.raafi.muhasabahharian.core.notification.NotificationScheduler
 import com.raafi.muhasabahharian.core.preference.NotificationPreferences
 import com.raafi.muhasabahharian.core.preference.UserPreferences
+import com.raafi.muhasabahharian.presentation.riwayat.DetailRiwayatViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,7 +36,7 @@ fun SettingScreen(
     isLoggedIn: Boolean = true,
     userEmail: String = "",
     onLogout: () -> Unit = {},
-    onLoginWithGoogle: () -> Unit = {}
+    viewModel: SettingViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -175,7 +177,10 @@ fun SettingScreen(
                 email = userEmail,
                 onLogoutClicked = {
                     AuthManager.signOut()
-                    coroutineScope.launch { UserPreferences.clear(context) }
+                    coroutineScope.launch {
+                        UserPreferences.clear(context)
+                        viewModel.clearReflection()
+                    }
                     NotificationScheduler.cancelDailyNotification(context)
                     onLogout()
                 },

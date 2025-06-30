@@ -30,6 +30,9 @@ interface MuhasabahDao {
     @Query("DELETE FROM muhasabah")
     suspend fun deleteAll()
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(list: List<MuhasabahEntity>)
+
     @Update
     suspend fun update(muhasabah: MuhasabahEntity)
 }

@@ -1,6 +1,7 @@
 package com.raafi.muhasabahharian.data.remote
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.raafi.muhasabahharian.data.local.entity.MuhasabahEntity
@@ -25,6 +26,17 @@ class RemoteMuhasabahDataSource @Inject constructor(
             .await()
     }
 
+    suspend fun fetchAll(): List<MuhasabahEntity> =
+        userCollection()
+            .orderBy("date")                                               // opsional
+            .get()
+            .await()
+            .documents
+            .map { doc ->
+                doc.toEntity()
+            }
+
+
     suspend fun delete(id: Int) {
         userCollection().document(id.toString()).delete().await()
     }
@@ -46,5 +58,15 @@ class RemoteMuhasabahDataSource @Inject constructor(
         "mood"      to mood,
         "score"     to score,
         "createdAt" to com.google.firebase.Timestamp.now()
+    )
+    private fun DocumentSnapshot.toEntity(): MuhasabahEntity = MuhasabahEntity(
+        id        = getLong("id")?.toInt()       ?: 0,
+        date      = getString("date")            ?: "",
+        type      = getString("type")            ?: "",
+        activity  = getString("activity")        ?: "",
+        obstacle  = getString("obstacle")        ?: "",
+        note      = getString("note")            ?: "",
+        mood      = getString("mood")            ?: "",
+        score     = getLong("score")?.toInt()    ?: 0
     )
 }

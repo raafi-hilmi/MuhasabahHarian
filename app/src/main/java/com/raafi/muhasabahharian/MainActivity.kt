@@ -17,7 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.raafi.muhasabahharian.core.auth.sync.SyncManager
 import com.raafi.muhasabahharian.core.navigation.NavigationGraph
 import com.raafi.muhasabahharian.core.navigation.Routes
 import com.raafi.muhasabahharian.presentation.login.LoginScreen
@@ -39,6 +41,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize().systemBarsPadding(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
+                    hiltViewModel<SyncManager>()
+
                     val navController = rememberNavController();
                     val startRoute = remember {
                         if (SessionManager.isUserSignedIn()) Routes.HOME else Routes.LOGIN

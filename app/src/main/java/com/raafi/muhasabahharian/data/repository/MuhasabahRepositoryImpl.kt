@@ -43,11 +43,20 @@ class MuhasabahRepositoryImpl @Inject constructor(
         dao.deleteAll()
         runCatching { remoteDS.deleteAll() }
             .onFailure { e -> Log.e("Repository", "Firestore delete failed", e) }
-
     }
     override suspend fun updateReflection(muhasabah: MuhasabahEntity) {
         dao.update(muhasabah)
         runCatching { remoteDS.upsert(muhasabah) }
             .onFailure { e -> Log.e("Repository", "Firestore update failed", e) }
+    }
+
+    override suspend fun refreshFromRemote() {
+        runCatching {
+            val remoteList = remoteDS.fetchAll()
+            dao.deleteAll()
+            dao.insertAll(remoteList)
+        }.onFailure { e ->
+            Log.e("Repository", "Sync-fetchAll failed", e)
+        }
     }
 }

@@ -11,4 +11,5 @@ interface MuhasabahRepository {
     suspend fun deleteReflectionById(id: Int)
     suspend fun deleteAllReflections()
     suspend fun updateReflection(muhasabah: MuhasabahEntity)
+    suspend fun refreshFromRemote()
 }
