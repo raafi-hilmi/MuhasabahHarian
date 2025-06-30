@@ -11,6 +11,17 @@ android {
     namespace = "com.raafi.muhasabahharian"
     compileSdk = 35
 
+    packagingOptions {
+        resources {
+            excludes += setOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md",
+                "META-INF/AL2.0",
+                "META-INF/LGPL2.1",
+                "META-INF/*.kotlin_module"
+            )
+        }
+    }
     defaultConfig {
         applicationId = "com.raafi.muhasabahharian"
         minSdk = 24
@@ -43,6 +54,12 @@ android {
     buildFeatures {
         compose = true
     }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+        animationsDisabled = true
+    }
 }
 
 dependencies {
@@ -70,6 +87,9 @@ dependencies {
     implementation(libs.androidx.foundation.android)
     implementation("androidx.room:room-runtime:2.7.2")
     implementation(libs.play.services.auth)
+    implementation(libs.core.ktx)
+    implementation(libs.androidx.junit.ktx)
+    testImplementation(libs.junit.jupiter)
     ksp("androidx.room:room-compiler:2.7.2")
     implementation("com.google.dagger:hilt-android:2.56.2")
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
@@ -81,6 +101,18 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation("androidx.test:core:1.6.1")
+    androidTestImplementation("androidx.test:runner:1.6.1")
+    androidTestImplementation("androidx.test:rules:1.6.1")
+    // Unit Testing
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    // Mocking
+    testImplementation("io.mockk:mockk:1.13.8")
+    androidTestImplementation("io.mockk:mockk-android:1.13.8")
+    // Architecture Components Testing
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
