@@ -220,7 +220,7 @@ fun StatistikScreen(
                                 verticalArrangement = Arrangement.SpaceBetween,
                                 horizontalAlignment = Alignment.End
                             ) {
-                                // Perbaikan label sumbu Y (0.0 - 1.0)
+                                // label sumbu Y
                                 for (i in 10 downTo 0 step 2) {
                                     Text("$i", fontSize = 12.sp, color = Color.Gray)
                                 }

@@ -1,16 +1,18 @@
 package com.raafi.muhasabahharian.core.navigation
 
+import ChooseTemplateScreen
+import MuhasabahScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.raafi.muhasabahharian.core.auth.AuthManager
 import com.raafi.muhasabahharian.presentation.login.LoginScreen
 import com.raafi.muhasabahharian.presentation.home.HomeScreen
-import com.raafi.muhasabahharian.presentation.muhasabah.MuhasabahScreen
-import com.raafi.muhasabahharian.presentation.muhasabah.choosetemplate.ChooseTemplateScreen
 import com.raafi.muhasabahharian.presentation.profile.ProfileScreen
 import com.raafi.muhasabahharian.presentation.riwayat.DetailRiwayatScreen
 import com.raafi.muhasabahharian.presentation.riwayat.RiwayatScreen
@@ -61,30 +63,37 @@ fun NavigationGraph(
                 }
             )
         }
-
         composable(Routes.CHOOSE_TEMPLATE) {
-            ChooseTemplateScreen(
-                onNavigateBack = { navController.popBackStack() },
-                onTemplateSelected = { type ->
-                    navController.navigate("${Routes.MUHASABAH}/$type")
-                },
-                onNavigateToHome = { navController.navigate(Routes.HOME) },
-                onNavigateToStatistik = { navController.navigate(Routes.STATISTIK) }
-            )
+            // Pastikan Anda mengimpor ChooseTemplateScreen dari package yang benar
+            ChooseTemplateScreen(navController = navController)
         }
+        composable(
+            route = "muhasabah_screen/{mood}", // Tambahkan {mood} untuk menangkap argumen
+            arguments = listOf(navArgument("mood") { type = NavType.StringType }) // Definisikan tipe argumen
+        ) { backStackEntry ->
+            // Ambil argumen yang dikirim
+            val moodName = backStackEntry.arguments?.getString("mood")
 
-        composable("${Routes.MUHASABAH}/{type}") { backStackEntry ->
-            val type = backStackEntry.arguments?.getString("type") ?: "produktif"
-            MuhasabahScreen(
-                type = type,
-                onNavigateBack = { navController.popBackStack() },
-                onNavigateToHome = {
-                    navController.navigate(Routes.HOME) {
-                        popUpTo(0)
-                    }
-                }
-            )
+            if (moodName != null) {
+                // Panggil MuhasabahScreen dengan argumen moodName
+                MuhasabahScreen(navController = navController, moodName = moodName)
+            } else {
+                // Handle jika moodName null, misal kembali ke halaman sebelumnya
+                navController.popBackStack()
+            }
         }
+//
+//        composable("${Routes.MUHASABAH}/{type}") { backStackEntry ->
+//            val type = backStackEntry.arguments?.getString("type") ?: "produktif"
+//            MuhasabahScreen(
+//                type = type,
+//                onNavigateBack = { navController.popBackStack() },
+//                onNavigateToHome = {
+//                    navController.navigate(Routes.HOME)
+//                }
+//
+//            )
+//        }
 
         composable(Routes.PROFILE) {
             ProfileScreen(

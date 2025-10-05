@@ -11,7 +11,6 @@ class MuhasabahRepositoryImpl @Inject constructor(
     private val dao: MuhasabahDao,
     private val remoteDS: RemoteMuhasabahDataSource
 ) : MuhasabahRepository {
-
     override suspend fun insertReflection(muhasabah: MuhasabahEntity) {
         val newId = dao.insert(muhasabah).toInt()
         val entityWithId = muhasabah.copy(id = newId)
@@ -19,26 +18,21 @@ class MuhasabahRepositoryImpl @Inject constructor(
         runCatching { remoteDS.upsert(entityWithId) }
             .onFailure { e -> Log.e("Repository", "Firestore insert failed", e) }
     }
-
     override fun getAllReflections(): Flow<List<MuhasabahEntity>> {
         return dao.getAll()
     }
-
     override suspend fun getReflectionById(id: Int): MuhasabahEntity? {
         return dao.getById(id)
     }
-
     override suspend fun deleteReflection(muhasabah: MuhasabahEntity) {
         dao.delete(muhasabah)
     }
-
     override suspend fun deleteReflectionById(id: Int) {
         dao.deleteById(id)
         runCatching { remoteDS.delete(id) }
             .onFailure { e -> Log.e("Repository", "Firestore delete by id failed", e) }
 
     }
-
     override suspend fun deleteAllReflections() {
         dao.deleteAll()
         runCatching { remoteDS.deleteAll() }
@@ -49,7 +43,6 @@ class MuhasabahRepositoryImpl @Inject constructor(
         runCatching { remoteDS.upsert(muhasabah) }
             .onFailure { e -> Log.e("Repository", "Firestore update failed", e) }
     }
-
     override suspend fun refreshFromRemote() {
         runCatching {
             val remoteList = remoteDS.fetchAll()

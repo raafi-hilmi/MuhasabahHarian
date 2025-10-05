@@ -5,6 +5,8 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
+import java.text.SimpleDateFormat
 import java.util.*
 
 object NotificationScheduler {
@@ -18,16 +20,14 @@ object NotificationScheduler {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Set pukul 21:00
         val calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
-//            add(Calendar.MINUTE, 1) testing
-            set(Calendar.HOUR_OF_DAY, 21)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
+            add(Calendar.MINUTE, 1) //testing 1menit aktif
+//            set(Calendar.HOUR_OF_DAY, 21)
+//            set(Calendar.MINUTE, 0)
+//            set(Calendar.SECOND, 0)
+//            set(Calendar.MILLISECOND, 0)
 
-            // Kalau jam sekarang sudah lewat 21:00, tambahkan 1 hari
             if (before(Calendar.getInstance())) {
                 add(Calendar.DAY_OF_MONTH, 1)
             }
@@ -39,6 +39,7 @@ object NotificationScheduler {
             AlarmManager.INTERVAL_DAY,
             pendingIntent
         )
+        Log.d("Notification", "Menjadwalkan notifikasi di: ${SimpleDateFormat("dd-MM-yyyy HH:mm").format(calendar.time)}")
     }
 
     fun cancelDailyNotification(context: Context) {

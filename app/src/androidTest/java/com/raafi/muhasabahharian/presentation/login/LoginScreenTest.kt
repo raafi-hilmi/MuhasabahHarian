@@ -94,10 +94,7 @@ class LoginScreenTest {
         composeTestRule.setContent {
             LoginScreen()
         }
-
-
         composeTestRule.onNodeWithText("Masuk sebagai Tamu").performClick()
-
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText("Login tamu gagal: $errorMessage").assertIsDisplayed()
     }
@@ -117,15 +114,12 @@ class LoginScreenTest {
         } answers {
             lambda<(FirebaseUser?) -> Unit>().invoke(mockUser)
         }
-
         composeTestRule.setContent {
             LoginScreen(
                 onGoogleSuccess = { googleSuccessCalled = true }
             )
         }
-
         composeTestRule.onNodeWithText("Masuk dengan Google").performClick()
-
         composeTestRule.waitForIdle()
         assert(googleSuccessCalled)
     }

@@ -178,7 +178,6 @@ fun RiwayatScreen(
                     } else {
                         Text("Data tidak ditemukan")
                     }
-
                 }
             }
             if (showDialog && pdfPath != null) {

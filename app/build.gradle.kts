@@ -89,6 +89,7 @@ dependencies {
     implementation(libs.play.services.auth)
     implementation(libs.core.ktx)
     implementation(libs.androidx.junit.ktx)
+    implementation(libs.androidx.navigation.runtime.ktx)
     testImplementation(libs.junit.jupiter)
     ksp("androidx.room:room-compiler:2.7.2")
     implementation("com.google.dagger:hilt-android:2.56.2")
